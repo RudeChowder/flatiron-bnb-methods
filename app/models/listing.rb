@@ -11,4 +11,21 @@ class Listing < ActiveRecord::Base
   validates :description, presence: true
   validates :price, presence: true
   validates :neighborhood_id, presence: true
+
+  after_create :hostify_user
+  after_destroy :dehostify_user
+
+  def average_review_rating
+    reviews.average(:rating)
+  end
+
+private
+
+  def hostify_user
+    host.update(host: true)
+  end
+
+  def dehostify_user
+    host.update(host: false) if host.listings.count.zero?
+  end
 end
