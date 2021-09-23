@@ -2,11 +2,8 @@ module ReservationInfo
 
   module InstanceMethods
     def openings(start_date, end_date)
-      query_datetimes = { start_date: start_date.to_datetime, end_date: end_date.to_datetime }
       listings.filter do |listing|
-        listing.reservations.none? do |reservation|
-          reservation.overlap?(query_datetimes)
-        end
+        listing.open?(start_date.to_datetime, end_date.to_datetime)
       end
     end
   end

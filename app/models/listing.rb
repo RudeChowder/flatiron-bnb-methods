@@ -19,6 +19,12 @@ class Listing < ActiveRecord::Base
     reviews.average(:rating)
   end
 
+  def open?(start_date, end_date)
+    reservations.none? do |reservation|
+      reservation.overlap?(start_date, end_date)
+    end
+  end
+
 private
 
   def hostify_user
